@@ -293,7 +293,27 @@
         let selectedPlanData = window.parent ? window.parent.selectedPlanData : [];
         let selectedClassData = window.parent ? window.parent.selectedClassData : [];
 
+        // 디버깅 정보 표시 함수
+        function showDebugInfo() {
+            console.log('=============== 디버깅 정보 ===============');
+            console.log('1. 현재 스크립트 실행 컨텍스트:', window === window.parent ? '부모 창' : 'iframe 내부');
+            console.log('2. window.parent 접근 가능 여부:', window.parent ? '가능' : '불가능');
+            console.log('3. selectedMemberData 직접 확인:', selectedMemberData);
+            
+            if (window.parent) {
+                try {
+                    console.log('4. 부모의 globalData 직접 확인:', window.parent.globalData);
+                } catch (e) {
+                    console.log('4. 부모의 globalData 접근 실패:', e.message);
+                }
+            }
+            
+            console.log('5. DOMContentLoaded 이벤트 발생 여부:', document.readyState);
+            console.log('==========================================');
+        }
+
         console.log('member-select.html 초기화 - 부모 창에서 받은 데이터:', selectedMemberData);
+        showDebugInfo();
 
         // 로딩 표시/숨김 기능
         function showLoading(isShow) {
@@ -305,6 +325,9 @@
 
         // 페이지 로드 시 실행
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded 이벤트 발생');
+            showDebugInfo();
+            
             // 날짜 입력 필드 초기화
             initDateInput();
             
@@ -316,50 +339,102 @@
             
             // 이미 로드된 데이터가 있으면 표시
             if (selectedMemberData && selectedMemberData.length > 0) {
+                console.log('회원 데이터 표시 시작 - 데이터 있음:', selectedMemberData.length);
                 displayMembers(selectedMemberData);
                 updateDesignMemberCard();
             } else {
-                console.log('index.html에서 받은 회원 데이터:', selectedMemberData);
+                console.log('회원 데이터 없음 - index.html에서 받은 데이터:', selectedMemberData);
+                
+                // iframe 환경인 경우 부모 창에서 다시 데이터 가져오기 시도
+                if (window.parent && window.parent.globalData) {
+                    console.log('부모 창에서 globalData 직접 접근 시도');
+                    try {
+                        const parentData = window.parent.globalData.selectedMemberData;
+                        console.log('부모 창 globalData에서 직접 가져온 데이터:', parentData);
+                        
+                        if (parentData && parentData.length > 0) {
+                            console.log('부모 창에서 직접 가져온 데이터로 표시 시도');
+                            selectedMemberData = parentData;
+                            displayMembers(selectedMemberData);
+                            updateDesignMemberCard();
+                        }
+                    } catch (e) {
+                        console.error('부모 창 데이터 접근 오류:', e);
+                    }
+                }
             }
 
             // 부모 창으로부터 메시지 수신 설정
             window.addEventListener('message', function(event) {
                 const message = event.data;
+                console.log('메시지 이벤트 수신:', message);
                 
                 if (message.type === 'dataUpdated') {
                     console.log('부모 창에서 데이터 업데이트됨');
+                    
+                    // 메시지에 데이터가 함께 전달된 경우 업데이트
+                    if (message.data && message.data.selectedMemberData) {
+                        console.log('메시지에서 전달된 회원 데이터:', message.data.selectedMemberData);
+                        selectedMemberData = message.data.selectedMemberData;
+                        selectedClassData = message.data.selectedClassData || [];
+                        selectedPlanData = message.data.selectedPlanData || [];
+                    }
+                    
+                    showDebugInfo();
                     console.log('업데이트된 회원 데이터:', selectedMemberData);
+                    
                     // 회원 목록 업데이트
                     displayMembers(selectedMemberData);
                     updateDesignMemberCard();
                 }
             });
+            
+            // 부모 창에 데이터 요청
+            if (!selectedMemberData || selectedMemberData.length === 0) {
+                console.log('데이터 없음 - 부모 창에 데이터 요청');
+                if (window.parent) {
+                    window.parent.postMessage({ type: 'requestData' }, '*');
+                }
+            }
         });
         
         // 회원 데이터 표시
         function displayMembers(members) {
             const container = document.getElementById('members-container');
-            if (!container) return;
+            if (!container) {
+                console.error('members-container 요소를 찾을 수 없음');
+                return;
+            }
+            
+            console.log('displayMembers 호출됨, 데이터:', members);
             
             // 컨테이너 비우기
             container.innerHTML = '';
             
             // 회원 정보가 없는 경우
             if (!members || members.length === 0) {
+                console.log('표시할 회원 데이터가 없음');
                 container.innerHTML = '<p class="no-results">표시할 회원이 없습니다.</p>';
                 return;
             }
             
+            console.log('회원 카드 생성 시작, 회원 수:', members.length);
+            
             // 각 회원별로 카드 생성
-            members.forEach((member) => {
+            members.forEach((member, index) => {
+                console.log(`회원 ${index} 처리:`, member);
+                
                 // 배열 형식 검증
                 if (!Array.isArray(member) || member.length < 3) {
+                    console.error(`회원 ${index}의 데이터 형식 오류:`, member);
                     return;
                 }
                 
                 const memberNumber = member[0]; // 회원번호
                 const memberName = member[1]; // 회원명
                 const birthDate = member[2]; // 생년월일
+                
+                console.log(`회원 정보 파싱: 번호=${memberNumber}, 이름=${memberName}, 생년월일=${birthDate}`);
                 
                 // 생년월일 포맷팅 (YYYYMMDD → YYYY-MM-DD)
                 let formattedBirth = '정보 없음';
@@ -388,7 +463,10 @@
                 
                 // 컨테이너에 추가
                 container.appendChild(memberCard);
+                console.log(`회원 ${index} 카드 생성 완료`);
             });
+            
+            console.log('총 생성된 회원 카드 수:', container.querySelectorAll('.member-card').length);
         }
         
         // 회원 카드 디자인 업데이트 함수

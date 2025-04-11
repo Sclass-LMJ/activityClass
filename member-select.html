@@ -288,14 +288,21 @@
     </div>
 
     <script>
+        // 전역 변수 - index.html에서 값을 받아옴
         let selectedMemberData = [];
         let selectedPlanData = [];
         let selectedClassData = [];
 
+        // 로딩 표시/숨김 기능
+        function showLoading(isShow) {
+            const loadingElement = document.getElementById('loading');
+            if (loadingElement) {
+                loadingElement.style.display = isShow ? 'flex' : 'none';
+            }
+        }
+
         // 페이지 로드 시 실행
-        document.addEventListener('DOMContentLoaded', async function() {
-            console.log('페이지 로드됨: 데이터 초기화 시작');
-            
+        document.addEventListener('DOMContentLoaded', function() {
             // 날짜 입력 필드 초기화
             initDateInput();
             
@@ -305,78 +312,12 @@
                 searchInput.addEventListener('input', filterMembers);
             }
             
-            // 현재 날짜 가져와서 데이터 로드
-            const dateInput = document.getElementById('date-input');
-            if (dateInput && dateInput.value) {
-                const formattedDate = changeDate(dateInput.value);
-                console.log('초기 로드할 날짜:', formattedDate);
-                
-                try {
-                    // 온라인 상태 확인
-                    if (typeof google !== 'undefined' && google.script) {
-                        // 모든 데이터 로드 (온라인)
-                        await loadAllData(formattedDate);
-                        displayMembers(selectedMemberData);
-                        updateDesignMemberCard();
-                    } else {
-                        // 샘플 데이터 로드 (오프라인)
-                        console.log('오프라인 모드: 샘플 데이터 사용');
-                        loadSampleData();
-                        // 샘플 데이터 전역 변수에 저장
-                        selectedMemberData = [
-                            ["M001", "김영희", "19520310", "20200101", "99991231"],
-                            ["M002", "박철수", "19480515", "20210305", "99991231"]
-                        ];
-                        // 샘플 수업신청 데이터
-                        selectedClassData = [
-                            ['A-123', 'id-1', '20250302', '1030', '1130', 'A123', '권○경', '공기압마사지', 'd5702-자신의 건강 유지하기', 'M001', '김영희', '19520310']
-                        ];
-                        updateDesignMemberCard();
-                    }
-                    console.log('초기 데이터 로드 완료');
-                } catch (error) {
-                    console.error('초기 데이터 로드 실패:', error);
-                    loadSampleData();
-                }
+            // 이미 로드된 데이터가 있으면 표시
+            if (selectedMemberData && selectedMemberData.length > 0) {
+                displayMembers(selectedMemberData);
+                updateDesignMemberCard();
             }
         });
-        
-        // 샘플 데이터 로드 (테스트용)
-        function loadSampleData() {
-            // 샘플 회원 데이터
-            const memberData = [
-                ["M001", "김영희", "19520310", "20200101", "99991231"],
-                ["M002", "박철수", "19480515", "20210305", "99991231"]
-            ];
-            
-            // 데이터 처리
-            displayMembers(memberData);
-        }
-        
-        // Google Apps Script에서 회원 데이터 로드
-        function loadMemberData() {
-            showLoading(true);
-            
-            // Google Apps Script 환경에서만 실행
-            if (typeof google !== 'undefined' && google.script) {
-                google.script.run
-                    .withSuccessHandler(function(data) {
-                        const members = JSON.parse(data);
-                        displayMembers(members);
-                        showLoading(false);
-                    })
-                    .withFailureHandler(function(error) {
-                        console.error('회원 데이터 로드 오류:', error);
-                        showLoading(false);
-                        alert('회원 데이터를 불러오는 중 오류가 발생했습니다.');
-                    })
-                    .getMemberData();
-            } else {
-                console.warn('Google Apps Script 환경이 아닙니다. 샘플 데이터를 사용합니다.');
-                loadSampleData();
-                showLoading(false);
-            }
-        }
         
         // 회원 데이터 표시
         function displayMembers(members) {
@@ -433,194 +374,6 @@
             });
         }
         
-        // 회원 선택 함수
-        function selectMember(memberNumber, memberName, birthDate) {
-            // 세션 스토리지에 선택된 회원 정보 저장
-            sessionStorage.setItem('selectedMember', JSON.stringify({
-                number: memberNumber,
-                name: memberName,
-                birth: birthDate
-            }));
-            
-            // 페이드 아웃 효과 적용 후 페이지 이동
-            document.body.classList.add('fade-out');
-            setTimeout(() => {
-                window.location.href = 'class-select.html';
-            }, 400);
-        }
-        
-        // 날짜 입력 필드 초기화
-        function initDateInput() {
-            const dateInput = document.getElementById('date-input');
-            if (!dateInput) return;
-            
-            // 세션 스토리지에서 저장된 날짜 확인
-            const savedDate = sessionStorage.getItem('selectedDate');
-            
-            let formattedDate;
-            if (savedDate) {
-                // 저장된 날짜가 있으면 사용
-                formattedDate = savedDate;
-                console.log('세션에서 저장된 날짜 사용:', formattedDate);
-            } else {
-                // 없으면 오늘 날짜 사용
-                const today = new Date();
-                const year = today.getFullYear();
-                const month = String(today.getMonth() + 1).padStart(2, '0');
-                const day = String(today.getDate()).padStart(2, '0');
-                formattedDate = `${year}-${month}-${day}`;
-                console.log('오늘 날짜 사용:', formattedDate);
-                
-                // 세션 스토리지에 오늘 날짜 저장
-                sessionStorage.setItem('selectedDate', formattedDate);
-            }
-            
-            // 입력 필드에 날짜 설정
-            dateInput.value = formattedDate;
-            
-            // 날짜 변경 이벤트 리스너 추가
-            dateInput.addEventListener('change', async (event) => {
-                const dateValue = event.target.value;
-                if (!dateValue) return;
-                
-                // YYYYMMDD 형식으로 변환
-                const formattedDate = changeDate(dateValue);
-                console.log('날짜 변경됨:', dateValue, '→', formattedDate);
-                
-                // 세션 스토리지에 원본 날짜 형식 저장
-                sessionStorage.setItem('selectedDate', dateValue);
-                
-                try {
-                    // 모든 데이터 로드
-                    console.log('새 날짜에 대한 데이터 로드 시작:', formattedDate);
-                    await loadAllData(formattedDate);
-                    displayMembers(selectedMemberData);
-                    updateDesignMemberCard();
-                    console.log('새 날짜 데이터 로드 완료:', formattedDate);
-                    
-                } catch (error) {
-                    console.error('새 날짜 데이터 로드 실패:', error);
-                    displayMembers([]);
-                }
-            });
-        }
-        
-        // 날짜를 YYYYMMDD 형식으로 변환하는 함수
-        function changeDate(dateStr) {
-            if (!dateStr) return '';
-            return dateStr.replace(/-/g, '');
-        }
-        
-        // 회원 필터링 - 검색어만으로 필터링하도록 수정
-        function filterMembers() {
-            const searchText = document.getElementById('search-input').value.toLowerCase();
-            const memberCards = document.querySelectorAll('.member-card');
-            
-            memberCards.forEach(card => {
-                const text = card.textContent.toLowerCase();
-                if (text.includes(searchText)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-        
-        // 로딩 표시/숨김 기능
-        function showLoading(isShow) {
-            const loadingElement = document.getElementById('loading');
-            if (loadingElement) {
-                loadingElement.style.display = isShow ? 'flex' : 'none';
-            }
-        }
-
-        // 회원 데이터를 가져오는 함수
-        async function getselectedMemberData_id(formattedDate) {
-            return new Promise((resolve, reject) => {
-                try {
-                    showLoading(true);
-                    // Google Apps Script 함수 호출
-                    google.script.run
-                        .withSuccessHandler((result) => {
-                            console.log(`회원 데이터 로드 완료 (${formattedDate}):`, result);
-                            showLoading(false);
-                            selectedMemberData = result;
-                            resolve(result);
-                        })
-                        .withFailureHandler((error) => {
-                            console.error('회원 데이터 로드 실패:', error);
-                            showLoading(false);
-                            selectedMemberData = [];
-                            reject(error);
-                        })
-                        .getselectedMemberData_gs(formattedDate);
-                } catch (error) {
-                    console.error('회원 데이터 로드 중 예외 발생:', error);
-                    showLoading(false);
-                    selectedMemberData = [];
-                    reject(error);
-                }
-            });
-        }
-
-        // 수업 데이터를 가져오는 함수
-        async function getselectedClassData_id(formattedDate) {
-            return new Promise((resolve, reject) => {
-                try {
-                    showLoading(true);
-                    // Google Apps Script 함수 호출
-                    google.script.run
-                        .withSuccessHandler((result) => {
-                            console.log(`수업신청 데이터 로드 완료 (${formattedDate}):`, result);
-                            showLoading(false);
-                            selectedClassData = result;
-                            resolve(result);
-                        })
-                        .withFailureHandler((error) => {
-                            console.error('수업신청 데이터 로드 실패:', error);
-                            showLoading(false);
-                            selectedClassData = [];
-                            reject(error);
-                        })
-                        .getselectedClassData_gs(formattedDate);
-                } catch (error) {
-                    console.error('수업신청 데이터 로드 중 예외 발생:', error);
-                    showLoading(false);
-                    selectedClassData = [];
-                    reject(error);
-                }
-            });
-        }
-
-        // 계획 데이터를 가져오는 함수
-        async function getselectedPlanData_id(formattedDate) {
-            return new Promise((resolve, reject) => {
-                try {
-                    showLoading(true);
-                    // Google Apps Script 함수 호출
-                    google.script.run
-                        .withSuccessHandler((result) => {
-                            console.log(`수업계획 데이터 로드 완료 (${formattedDate}):`, result);
-                            showLoading(false);
-                            selectedPlanData = result;
-                            resolve(result);
-                        })
-                        .withFailureHandler((error) => {
-                            console.error('수업계획 데이터 로드 실패:', error);
-                            showLoading(false);
-                            selectedPlanData = [];
-                            reject(error);
-                        })
-                        .getselectedPlanData_gs(formattedDate);
-                } catch (error) {
-                    console.error('수업계획 데이터 로드 중 예외 발생:', error);
-                    showLoading(false);
-                    selectedPlanData = [];
-                    reject(error);
-                }
-            });
-        }
-
         // 회원 카드 디자인 업데이트 함수
         function updateDesignMemberCard() {
             // 수업신청 데이터가 없으면 함수 종료
@@ -656,52 +409,100 @@
             });
         }
 
-        // 모든 데이터를 한번에 로드하는 함수
-        async function loadAllData(formattedDate) {
-            try {
-                showLoading(true);
-                
-                // 병렬로 모든 데이터 로드
-                const [memberData, classData, planData] = await Promise.all([
-                    getselectedMemberData_id(formattedDate),
-                    getselectedClassData_id(formattedDate),
-                    getselectedPlanData_id(formattedDate)
-                ]);
-                
-                showLoading(false);
-                
-                // 디버깅 정보 출력
-                console.log(`===== ${formattedDate} 날짜의 데이터 로드 결과 =====`);
-                console.log(`회원 데이터 (${memberData.length}명):`, memberData);
-                console.log(`수업신청 데이터 (${classData.length}건):`, classData);
-                console.log(`수업계획 데이터 (${planData.length}건):`, planData);
-                
-                // 데이터 구조 자세히 살펴보기
-                if (memberData.length > 0) {
-                    console.log('회원 데이터 구조 예시:', memberData[0]);
-                }
-                if (classData.length > 0) {
-                    console.log('수업신청 데이터 구조 예시:', classData[0]);
-                }
-                if (planData.length > 0) {
-                    console.log('수업계획 데이터 구조 예시:', planData[0]);
-                }
-                
-                return {
-                    memberData,
-                    classData,
-                    planData
-                };
-            } catch (error) {
-                console.error('데이터 로드 중 오류 발생:', error);
-                showLoading(false);
-                displayMembers([]);
-                return {
-                    memberData: [],
-                    classData: [],
-                    planData: []
-                };
+        // 회원 선택 함수
+        function selectMember(memberNumber, memberName, birthDate) {
+            // 세션 스토리지에 선택된 회원 정보 저장
+            sessionStorage.setItem('selectedMember', JSON.stringify({
+                number: memberNumber,
+                name: memberName,
+                birth: birthDate
+            }));
+            
+            // 상위 창에 navigateTo 함수 호출
+            if (window.parent && window.parent.navigateTo) {
+                window.parent.navigateTo('class-select');
+            } else {
+                // 페이드 아웃 효과 적용 후 페이지 이동
+                document.body.classList.add('fade-out');
+                setTimeout(() => {
+                    window.location.href = '?page=class-select';
+                }, 400);
             }
+        }
+        
+        // 날짜 입력 필드 초기화
+        function initDateInput() {
+            const dateInput = document.getElementById('date-input');
+            if (!dateInput) return;
+            
+            // 세션 스토리지에서 저장된 날짜 확인
+            const savedDate = sessionStorage.getItem('selectedDate');
+            
+            let formattedDate;
+            if (savedDate) {
+                // 저장된 날짜가 있으면 사용
+                formattedDate = savedDate;
+            } else {
+                // 없으면 오늘 날짜 사용
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                formattedDate = `${year}-${month}-${day}`;
+                
+                // 세션 스토리지에 오늘 날짜 저장
+                sessionStorage.setItem('selectedDate', formattedDate);
+            }
+            
+            // 입력 필드에 날짜 설정
+            dateInput.value = formattedDate;
+            
+            // 날짜 변경 이벤트 리스너 추가
+            dateInput.addEventListener('change', async (event) => {
+                const dateValue = event.target.value;
+                if (!dateValue) return;
+                
+                // YYYYMMDD 형식으로 변환
+                const formattedDate = changeDate(dateValue);
+                
+                // 세션 스토리지에 원본 날짜 형식 저장
+                sessionStorage.setItem('selectedDate', dateValue);
+                
+                // 상위 창에 날짜 변경 메시지 전송
+                if (window.parent && window.parent.loadAllData) {
+                    try {
+                        // 부모 창의 loadAllData 함수 호출
+                        await window.parent.loadAllData(formattedDate);
+                        
+                        // UI 업데이트
+                        displayMembers(selectedMemberData);
+                        updateDesignMemberCard();
+                    } catch (error) {
+                        console.error('데이터 로드 실패:', error);
+                    }
+                }
+            });
+        }
+        
+        // 날짜를 YYYYMMDD 형식으로 변환하는 함수
+        function changeDate(dateStr) {
+            if (!dateStr) return '';
+            return dateStr.replace(/-/g, '');
+        }
+        
+        // 회원 필터링 - 검색어만으로 필터링하도록 수정
+        function filterMembers() {
+            const searchText = document.getElementById('search-input').value.toLowerCase();
+            const memberCards = document.querySelectorAll('.member-card');
+            
+            memberCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchText)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
         }
     </script>
 </body>

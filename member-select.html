@@ -515,18 +515,15 @@
                 birth: birthDate
             }));
             
-            // 직접 URL로 이동 (하드코딩)
-            try {
-                console.log('GitHub 페이지로 직접 이동');
-                // GitHub 페이지 직접 URL
-                const directUrl = 'https://Sclass-LMJ.github.io/activityClass/class-select.html';
-                
-                // 페이지 이동
-                window.location.href = directUrl;
-            } catch (error) {
-                console.error('페이지 이동 오류:', error);
-                alert('페이지 이동 중 오류가 발생했습니다. 다시 시도해주세요.');
-            }
+            // 간단한 페이지 이동 (GitHub Pages에 최적화)
+            console.log('상대 경로로 페이지 이동');
+            // 페이드 아웃 효과 추가
+            document.body.classList.add('fade-out');
+            
+            // 지연 후 이동
+            setTimeout(() => {
+                window.location.href = 'class-select.html';
+            }, 300);
         }
         
         // 날짜 입력 필드 초기화

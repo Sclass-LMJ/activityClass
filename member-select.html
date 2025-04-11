@@ -506,6 +506,8 @@
 
         // 회원 선택 함수
         function selectMember(memberNumber, memberName, birthDate) {
+            console.log('회원 선택됨:', memberNumber, memberName, birthDate);
+            
             // 세션 스토리지에 선택된 회원 정보 저장
             sessionStorage.setItem('selectedMember', JSON.stringify({
                 number: memberNumber,
@@ -513,15 +515,39 @@
                 birth: birthDate
             }));
             
-            // 상위 창에 navigateTo 함수 호출
-            if (window.parent && window.parent.navigateTo) {
-                window.parent.navigateTo('class-select');
-            } else {
-                // 페이드 아웃 효과 적용 후 페이지 이동
-                document.body.classList.add('fade-out');
-                setTimeout(() => {
-                    window.location.href = '?page=class-select';
-                }, 400);
+            try {
+                // 상위 창에 navigateTo 함수 호출
+                if (window.parent && window.parent.navigateTo) {
+                    console.log('부모 창의 navigateTo 함수 호출');
+                    window.parent.navigateTo('class-select');
+                } else {
+                    // iframe이 아닌 경우에만 window.location 사용
+                    console.log('부모 창 함수 없음, 직접 URL 변경 시도');
+                    
+                    if (window === window.parent) {
+                        // 독립 실행 환경
+                        console.log('독립 실행 환경에서 이동');
+                        document.body.classList.add('fade-out');
+                        setTimeout(() => {
+                            // 상대 경로로 변경
+                            window.location.href = 'class-select.html';
+                        }, 400);
+                    } else {
+                        // iframe 내부지만 부모 함수가 없는 경우
+                        console.log('iframe 내부에서 메시지 이벤트로 이동 요청');
+                        window.parent.postMessage({
+                            type: 'navigate',
+                            page: 'class-select'
+                        }, '*');
+                    }
+                }
+            } catch (error) {
+                console.error('페이지 이동 중 오류 발생:', error);
+                
+                // 최후의 수단으로 URL 해시 변경
+                alert('페이지 이동에 문제가 발생했습니다. 다시 시도합니다.');
+                window.location.hash = 'page=class-select';
+                location.reload();
             }
         }
         

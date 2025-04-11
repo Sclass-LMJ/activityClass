@@ -289,9 +289,11 @@
 
     <script>
         // 전역 변수 - index.html에서 값을 받아옴
-        let selectedMemberData = [];
-        let selectedPlanData = [];
-        let selectedClassData = [];
+        let selectedMemberData = window.parent ? window.parent.selectedMemberData : [];
+        let selectedPlanData = window.parent ? window.parent.selectedPlanData : [];
+        let selectedClassData = window.parent ? window.parent.selectedClassData : [];
+
+        console.log('member-select.html 초기화 - 부모 창에서 받은 데이터:', selectedMemberData);
 
         // 로딩 표시/숨김 기능
         function showLoading(isShow) {
@@ -316,7 +318,22 @@
             if (selectedMemberData && selectedMemberData.length > 0) {
                 displayMembers(selectedMemberData);
                 updateDesignMemberCard();
+            } else {
+                console.log('index.html에서 받은 회원 데이터:', selectedMemberData);
             }
+
+            // 부모 창으로부터 메시지 수신 설정
+            window.addEventListener('message', function(event) {
+                const message = event.data;
+                
+                if (message.type === 'dataUpdated') {
+                    console.log('부모 창에서 데이터 업데이트됨');
+                    console.log('업데이트된 회원 데이터:', selectedMemberData);
+                    // 회원 목록 업데이트
+                    displayMembers(selectedMemberData);
+                    updateDesignMemberCard();
+                }
+            });
         });
         
         // 회원 데이터 표시

@@ -515,38 +515,17 @@
                 birth: birthDate
             }));
             
-            // 페이지 이동 (간소화된 버전)
+            // 직접 URL로 이동 (하드코딩)
             try {
-                // GitHub 환경에서는 간단히 쿼리 파라미터 사용
-                console.log('페이지 이동 시도: class-select');
+                console.log('GitHub 페이지로 직접 이동');
+                // GitHub 페이지 직접 URL
+                const directUrl = 'https://Sclass-LMJ.github.io/activityClass/class-select.html';
                 
-                // 방법 1: index.html의 navigateTo 함수 사용 (가장 안전)
-                if (window.parent && typeof window.parent.navigateTo === 'function') {
-                    console.log('부모 창의 navigateTo 함수 사용');
-                    window.parent.navigateTo('class-select');
-                    return;
-                }
-                
-                // 방법 2: 메시지 이벤트 사용
-                if (window !== window.parent) {
-                    console.log('부모 창에 메시지 이벤트 전송');
-                    window.parent.postMessage({
-                        type: 'navigate',
-                        page: 'class-select'
-                    }, '*');
-                    return;
-                }
-                
-                // 방법 3: 직접 URL 구성 (GitHub 페이지 또는 로컬 개발용)
-                console.log('직접 URL 이동');
-                window.location.href = '?page=class-select';
-                
+                // 페이지 이동
+                window.location.href = directUrl;
             } catch (error) {
                 console.error('페이지 이동 오류:', error);
-                
-                // 최후의 수단
-                alert('페이지 이동 중 오류가 발생했습니다. 다시 시도합니다.');
-                window.location.href = 'index.html?page=class-select';
+                alert('페이지 이동 중 오류가 발생했습니다. 다시 시도해주세요.');
             }
         }
         

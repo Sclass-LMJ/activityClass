@@ -314,21 +314,7 @@ h1::after {
     transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@media (max-width: 768px) {
-    .product-card.active {
-        transform: rotateY(180deg);
-        position: relative;
-        top: auto;
-        left: auto;
-        margin-top: 0;
-        scale: 1;
-    }
-    
-    .product-card {
-        width: 220px;
-        height: 340px;
-    }
-}
+
 
 .card-front,
 .card-back {
@@ -859,146 +845,7 @@ h1::after {
     font-size: 1.1rem;
 }
 
-/* 중간 화면 (768px 이하) */
-@media (max-width: 768px) {
-    .cards-container {
-        max-width: 570px;
-    }
 
-    .product-card {
-        width: 220px;
-        height: 340px;
-    }
-
-    .product-image {
-        height: 140px;
-    }
-
-    .product-title {
-        font-size: 1rem;
-    }
-
-    .member-info {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 1rem;
-    }
-
-    .member-info-text,
-    .applied-classes,
-    .date-selector {
-        width: 100%;
-        flex: 0 0 auto;
-        padding: 0.5rem;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .applied-classes {
-        margin: 1rem 0;
-        order: 3;
-    }
-
-    .date-selector {
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        order: 2;
-    }
-
-    .date-input {
-        width: auto;
-        flex: 1;
-        max-width: 150px;
-        margin-right: 10px;
-    }
-}
-
-/* 소형 화면 (482px 이하) */
-@media (max-width: 482px) {
-    .cards-container {
-        max-width: 100%;
-        justify-content: center;
-    }
-
-    .product-card {
-        width: 85%;
-        height: 380px;
-        margin: 0 auto;
-    }
-
-    .product-image {
-        height: 160px;
-    }
-
-    .member-info {
-        padding: 0.8rem;
-    }
-
-    .member-info-text,
-    .applied-classes,
-    .date-selector {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
-
-    .member-name {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        white-space: normal;
-    }
-
-    .greeting {
-        margin-top: 0.2rem;
-    }
-
-    .applied-class-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        width: 100%;
-        justify-content: center;
-    }
-
-    .applied-class-tag,
-    .member-details {
-        white-space: normal;
-        text-align: center;
-        word-break: keep-all;
-    }
-
-    .filter-container {
-        gap: 8px;
-    }
-
-    .filter-button {
-        padding: 6px 12px;
-        font-size: 0.85rem;
-    }
-
-    .date-selector {
-        flex-direction: column;
-    }
-
-    .date-input {
-        width: 100%;
-        max-width: none;
-        margin-right: 0;
-        margin-bottom: 10px;
-    }
-
-    .change-member-btn {
-        width: 100%;
-        text-align: center;
-    }
-}
 
 /* 최종 확인 모달 */
 .final-confirm-modal {
@@ -1413,3 +1260,4 @@ h1::after {
     margin-bottom: 0.25rem;
     padding: 0 0.2rem;
 }
+

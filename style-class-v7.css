@@ -278,7 +278,7 @@ h1::after {
 
 .product-card {
     width: 270px;
-    height: 350px;
+    height: 370px;
     background-color: white;
     border-radius: 0.9375rem;
     position: relative;
@@ -322,6 +322,11 @@ h1::after {
         left: auto;
         margin-top: 0;
         scale: 1;
+    }
+    
+    .product-card {
+        width: 220px;
+        height: 340px;
     }
 }
 
@@ -843,7 +848,7 @@ h1::after {
 /* 기본 스타일 (768px 초과) */
 .product-card {
     width: 270px;
-    height: 350px;
+    height: 370px;
 }
 
 .product-image {
@@ -862,7 +867,7 @@ h1::after {
 
     .product-card {
         width: 220px;
-        height: 320px;
+        height: 340px;
     }
 
     .product-image {
@@ -918,8 +923,8 @@ h1::after {
     }
 
     .product-card {
-        width: 80%;
-        height: 350px;
+        width: 85%;
+        height: 380px;
         margin: 0 auto;
     }
 

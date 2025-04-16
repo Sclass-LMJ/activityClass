@@ -167,6 +167,15 @@ h1::after {
     text-align: center;
 }
 
+.button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
 .change-member-btn {
     padding: 0.5rem 0.9375rem;
     background: var(--button-color);
@@ -177,7 +186,6 @@ h1::after {
     transition: all 0.3s ease;
     white-space: nowrap;
     color: var(--text-dark);
-    margin-top: 0.5rem;
 }
 
 .change-member-btn:hover {
@@ -420,7 +428,7 @@ h1::after {
     background-color: var(--main-color);
     color: white;
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     line-height: 1.875rem;
     font-weight: 700;
     transform: rotate(45deg);
@@ -1306,4 +1314,45 @@ h1::after {
 .card-overlay.active {
     display: block;
     opacity: 1;
+}
+
+/* 클래스 카드 파스텔 색상 변형 */
+.product-card.pastel-color-1 {
+  background: linear-gradient(135deg, #FFFAFA 0%, #ffffff 100%);
+  border-color: #FFF0F0;
+}
+
+.product-card.pastel-color-2 {
+  background: linear-gradient(135deg, #F5FFFF 0%, #ffffff 100%);
+  border-color: #F0FFFF;
+}
+
+.product-card.pastel-color-3 {
+  background: linear-gradient(135deg, #FFFAFC 0%, #ffffff 100%);
+  border-color: #FFF8FA;
+}
+
+.product-card.pastel-color-4 {
+  background: linear-gradient(135deg, #FAFFFA 0%, #ffffff 100%);
+  border-color: #F8FFF8;
+}
+
+.product-card.pastel-color-5 {
+  background: linear-gradient(135deg, #FCFCF5 0%, #ffffff 100%);
+  border-color: #FAFAEF;
+}
+
+.product-card.pastel-color-6 {
+  background: linear-gradient(135deg, #F8F8FE 0%, #ffffff 100%);
+  border-color: #F5F5FD;
+}
+
+.product-card.pastel-color-7 {
+  background: linear-gradient(135deg, #FFFEF8 0%, #ffffff 100%);
+  border-color: #FFFDF5;
+}
+
+.product-card.pastel-color-8 {
+  background: linear-gradient(135deg, #FAFFFF 0%, #ffffff 100%);
+  border-color: #F8FFFF;
 }

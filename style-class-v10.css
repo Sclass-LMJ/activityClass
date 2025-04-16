@@ -282,22 +282,12 @@ h1::after {
     background-color: white;
     border-radius: 0.9375rem;
     position: relative;
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
     transform-style: preserve-3d;
     perspective: 62.5rem;
-    cursor: pointer;
     border: 1px solid var(--light-color);
     box-shadow: 0 0.3125rem 0.9375rem var(--shadow-color);
-    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.product-card.active {
-    transform: rotateY(180deg) translate(-50%, -50%) scale(2.0);
-    position: fixed;
-    z-index: 999;
-    box-shadow: 0 1.875rem 3.125rem rgba(35, 81, 53, 0.2);
-    top: 50%;
-    left: 50%;
-    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .product-card:hover {
@@ -314,6 +304,16 @@ h1::after {
     transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
+.product-card.active {
+    transform: translate(-50%, -50%) rotateY(180deg) scale(2.0);
+    position: fixed;
+    z-index: 999;
+    box-shadow: 0 1.875rem 3.125rem rgba(35, 81, 53, 0.2);
+    top: 50%;
+    left: 50%;
+    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 @media (max-width: 768px) {
     .product-card.active {
         transform: rotateY(180deg);
@@ -328,143 +328,36 @@ h1::after {
         width: 220px;
         height: 340px;
     }
-
-    .member-info {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 1rem;
-    }
-
-    .member-info-text,
-    .applied-classes,
-    .date-selector {
-        width: 100%;
-        flex: 0 0 auto;
-        padding: 0.5rem;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .applied-classes {
-        margin: 1rem 0;
-        order: 3;
-    }
-
-    .date-selector {
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        order: 2;
-    }
-
-    .date-input {
-        width: auto;
-        flex: 1;
-        max-width: 150px;
-        margin-right: 10px;
-    }
-}
-
-@media (max-width: 482px) {
-    .product-card {
-        width: 85%;
-        height: 380px;
-        margin: 0 auto;
-    }
-
-    .member-info {
-        padding: 0.8rem;
-    }
-
-    .member-info-text,
-    .applied-classes,
-    .date-selector {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
-
-    .member-name {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        white-space: normal;
-    }
-
-    .greeting {
-        margin-top: 0.2rem;
-    }
-
-    .applied-class-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        width: 100%;
-        justify-content: center;
-    }
-
-    .applied-class-tag,
-    .member-details {
-        white-space: normal;
-        text-align: center;
-        word-break: keep-all;
-    }
-
-    .filter-container {
-        gap: 8px;
-    }
-
-    .filter-button {
-        padding: 6px 12px;
-        font-size: 0.85rem;
-    }
-
-    .date-selector {
-        flex-direction: column;
-    }
-
-    .date-input {
-        width: 100%;
-        max-width: none;
-        margin-right: 0;
-        margin-bottom: 10px;
-    }
-
-    .change-member-btn {
-        width: 100%;
-        text-align: center;
-    }
 }
 
 .card-front,
 .card-back {
-    position: absolute;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden;
-    border-radius: 0.9375rem;
-    overflow: hidden;
-    transform-origin: center center;
-}
-
-.card-back {
-    transform: rotateY(180deg);
-    background: var(--card-back-gradient);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 1.25rem;
-    text-align: center;
     position: absolute;
     top: 0;
     left: 0;
+    backface-visibility: hidden;
+    border-radius: 0.9375rem;
+    overflow: hidden;
+    box-shadow: 0 0.625rem 1.25rem rgba(0, 0, 0, 0.1);
+}
+
+.card-back {
+    background: var(--card-back-gradient);
+    transform: rotateY(180deg);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
+    opacity: 1;
+    position: relative;
+    background-image: url('https://newsimg.hankookilbo.com/cms/articlerelease/2021/02/05/6e089997-44db-4f18-97dd-ee337f9a5810.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 0.9375rem;
 }
 
 .card-back::before {

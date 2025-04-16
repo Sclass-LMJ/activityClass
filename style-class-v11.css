@@ -282,39 +282,36 @@ h1::after {
     background-color: white;
     border-radius: 0.9375rem;
     position: relative;
-    transform: translateZ(0);
-    will-change: transform;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
     transform-style: preserve-3d;
     perspective: 62.5rem;
     border: 1px solid var(--light-color);
     box-shadow: 0 0.3125rem 0.9375rem var(--shadow-color);
-    backface-visibility: hidden;
 }
 
 .product-card:hover {
-    transform: translateY(-0.9375rem) rotateY(5deg) translateZ(0);
+    transform: translateY(-0.9375rem) rotateY(5deg);
     box-shadow: 0 0.9375rem 1.875rem rgba(35, 81, 53, 0.15);
     border-color: var(--accent-color);
 }
 
 .product-card.inactive {
-    opacity: 0.8;
-    transform: scale(0.95) translateZ(0);
+    opacity: 1;
+    transform: scale(0.95);
     filter: none;
     pointer-events: none;
-    transition: all 0.4s ease;
+    transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .product-card.active {
-    transform: translate(-50%, -50%) rotateY(180deg) scale(2.0) translateZ(0);
+    transform: translate(-50%, -50%) rotateY(180deg) scale(2.0);
     position: fixed;
     z-index: 999;
     box-shadow: 0 1.875rem 3.125rem rgba(35, 81, 53, 0.2);
     top: 50%;
     left: 50%;
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @media (max-width: 768px) {
@@ -552,13 +549,12 @@ h1::after {
     background: white;
     border-radius: 15px;
     overflow: hidden;
-    transform: scale(0.8) translateZ(0);
-    will-change: transform;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: scale(0.8);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .modal.active .modal-content {
-    transform: scale(1) translateZ(0);
+    transform: scale(1);
 }
 
 .modal-header {
@@ -1032,13 +1028,12 @@ h1::after {
     background: white;
     border-radius: 15px;
     overflow: hidden;
-    transform: scale(0.8) translateZ(0);
-    will-change: transform;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: scale(0.8);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .final-confirm-modal.active .final-modal-content {
-    transform: scale(1) translateZ(0);
+    transform: scale(1);
 }
 
 .final-modal-header {
@@ -1189,13 +1184,12 @@ h1::after {
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
-    transform: translateY(30px) scale(0.95) translateZ(0);
-    will-change: transform;
-    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transform: translateY(30px) scale(0.95);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .complete-modal-overlay.show .complete-modal-container {
-    transform: translateY(0) scale(1) translateZ(0);
+    transform: translateY(0) scale(1);
 }
 
 .complete-modal-header {
@@ -1273,9 +1267,7 @@ h1::after {
     background: white;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transform: translateZ(0);
-    will-change: transform;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .complete-class-item:last-child {
@@ -1284,7 +1276,7 @@ h1::after {
 
 .complete-class-item:hover {
     box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px) translateZ(0);
+    transform: translateY(-2px);
 }
 
 .complete-class-badge {
@@ -1328,9 +1320,7 @@ h1::after {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transform: translateZ(0);
-    will-change: transform;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
     text-align: center;
 }
 
@@ -1342,7 +1332,7 @@ h1::after {
 
 .complete-modal-btn-primary:hover {
     box-shadow: 0 6px 18px rgba(106, 17, 203, 0.35);
-    transform: translateY(-3px) translateZ(0);
+    transform: translateY(-3px);
 }
 
 .complete-modal-btn-secondary {
@@ -1353,7 +1343,7 @@ h1::after {
 
 .complete-modal-btn-secondary:hover {
     background: #e5eaf2;
-    transform: translateY(-3px) translateZ(0);
+    transform: translateY(-3px);
 }
 
 /* 카드 오버레이 스타일 추가 */

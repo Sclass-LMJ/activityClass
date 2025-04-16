@@ -353,3 +353,48 @@ h1::after {
   opacity: 1;
 }
 
+          /* member-select 반응형 스타일 */
+          /* 반응형 스타일 */
+          @media (max-width: 1400px) {
+              .p1-member-card {
+                  width: calc(16.666% - 0.9375rem);
+                  padding: 1.25rem;
+              }
+          }
+    
+          @media (max-width: 1200px) {
+              .p1-member-card {
+                  width: calc(33.333% - 1.25rem);
+              }
+          }
+    
+          @media (max-width: 992px) {
+              .p1-member-card {
+                  width: calc(33.333% - 1.0625rem);
+              }
+          }
+    
+          @media (max-width: 768px) {
+              .p1-member-card {
+                  width: calc(50% - 0.625rem);
+              }
+          }
+    
+          @media (max-width: 480px) {
+              .p1-member-card {
+                  width: 100%;
+              }
+          }
+    
+          @media (max-width: 576px) {
+              .p1-search-container {
+                  flex-direction: column;
+                  max-width: 100%;
+              }
+    
+              .p1-date-input {
+                  width: 100%;
+              }
+          }
+    
+          /* member-select 반응형 스타일 */

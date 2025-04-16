@@ -189,43 +189,43 @@ h1::after {
 
 /* 회원 카드 파스텔 색상 변형 */
 .p1-member-card.pastel-color-1 {
-  background-color: #FFE4E1; /* 미스티 로즈 */
-  border-color: #FFD1CC;
+  background: linear-gradient(135deg, #FFF5F5 0%, #ffffff 100%);
+  border-color: #FFE4E1;
 }
 
 .p1-member-card.pastel-color-2 {
-  background-color: #E0FFFF; /* 라이트 시안 */
-  border-color: #CCFFFF;
+  background: linear-gradient(135deg, #F0FFFF 0%, #ffffff 100%);
+  border-color: #E0FFFF;
 }
 
 .p1-member-card.pastel-color-3 {
-  background-color: #FFF0F5; /* 라벤더 블러쉬 */
-  border-color: #FFE4EF;
+  background: linear-gradient(135deg, #FFF8FA 0%, #ffffff 100%);
+  border-color: #FFF0F5;
 }
 
 .p1-member-card.pastel-color-4 {
-  background-color: #F0FFF0; /* 허니듀 */
-  border-color: #E1FFE1;
+  background: linear-gradient(135deg, #F8FFF8 0%, #ffffff 100%);
+  border-color: #F0FFF0;
 }
 
 .p1-member-card.pastel-color-5 {
-  background-color: #F5F5DC; /* 베이지 */
-  border-color: #EFEDD0;
+  background: linear-gradient(135deg, #FAFAEF 0%, #ffffff 100%);
+  border-color: #F5F5DC;
 }
 
 .p1-member-card.pastel-color-6 {
-  background-color: #E6E6FA; /* 라벤더 */
-  border-color: #D9D9FF;
+  background: linear-gradient(135deg, #F5F5FD 0%, #ffffff 100%);
+  border-color: #E6E6FA;
 }
 
 .p1-member-card.pastel-color-7 {
-  background-color: #FFF8DC; /* 콘실크 */
-  border-color: #FFF4C2;
+  background: linear-gradient(135deg, #FFFDF5 0%, #ffffff 100%);
+  border-color: #FFF8DC;
 }
 
 .p1-member-card.pastel-color-8 {
-  background-color: #F0FFFF; /* 앨리스 블루 */
-  border-color: #E6FFFF;
+  background: linear-gradient(135deg, #F8FFFF 0%, #ffffff 100%);
+  border-color: #F0FFFF;
 }
 
 /* 수업이 있는 회원 카드의 테두리 스타일은 배경색에 관계없이 유지 */
@@ -246,6 +246,20 @@ h1::after {
   color: var(--main-color);
   margin-bottom: 0.9375rem;
   text-align: center;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.p1-member-card h3::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+  border-radius: 1px;
 }
 
 .p1-member-card p {
